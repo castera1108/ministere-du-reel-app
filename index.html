@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#172554">
-<title>Ministère du Réel — V1</title>
+<title>Ministère du Réel — Application</title>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
 <style>
@@ -17,7 +17,7 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
 .card{background:#fff;border:1px solid #d5dbe3;padding:15px;margin:12px 0}.label{font-size:9px;font-weight:900;letter-spacing:1.5px;color:#64748b}.value{font-size:17px;font-weight:900;margin-top:5px}
 .decision{border:3px solid #172554;background:#fff;padding:18px;margin-top:18px}.decision h2{font-size:19px;line-height:1.2;margin:7px 0 12px}.decision p{font-size:14px;line-height:1.55}
 .action{background:#fff7cc;border:1px solid #eab308;padding:16px;margin-top:14px;font-size:14px;line-height:1.55}.rare{background:#ede9fe;border-color:#7c3aed}.footer{text-align:center;color:#64748b;font-size:9px;letter-spacing:1px;padding:25px 0}
-#file{display:none}.detected{margin-top:8px;font-size:13px}.confidence{font-variant-numeric:tabular-nums}
+.share{background:#f1f5f9;border:1px solid #cbd5e1;padding:15px;margin-top:18px}.share-intro{font-size:12px;line-height:1.45;color:#475569;margin:8px 0 12px}.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sharebtn{width:100%;padding:12px 8px;background:#fff;color:#172554;border:1px solid #172554;border-radius:2px;font-size:11px}.sharebtn.wide{grid-column:1/-1}.share-status{font-size:11px;line-height:1.4;color:#475569;margin-top:9px;min-height:15px}#file{display:none}.detected{margin-top:8px;font-size:13px}.confidence{font-variant-numeric:tabular-nums}.form{background:#fff;border:1px solid #d5dbe3;padding:16px;margin-top:16px}.form label{display:block;font-size:10px;font-weight:900;letter-spacing:1px;color:#64748b;margin:14px 0 6px}.form textarea,.form input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:2px;font:inherit;font-size:14px}.form textarea{min-height:100px;resize:vertical}.tiny{font-size:11px;line-height:1.5;color:#64748b}.success{background:#ecfdf5;border-left:5px solid #059669;padding:15px;margin-top:16px;font-size:13px;line-height:1.55}.submission-ref{font-weight:900;letter-spacing:.5px}
 </style>
 </head>
 <body>
@@ -51,7 +51,7 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
 <div class="micro">INSTRUCTION EN COURS</div>
 <h1>Analyse de conformité</h1>
 <p class="lead">La pièce est examinée par les services compétents.</p>
-<div class="status" id="analysisText">Chargement du référentiel de réalité…<div class="progress"><div class="bar" id="bar"></div></div></div>
+<div class="status" id="analysisText">Consultation du Référentiel national de la réalité…<div class="progress"><div class="bar" id="bar"></div></div></div>
 </section>
 
 <section id="result" class="screen">
@@ -62,6 +62,44 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
 <div class="card"><div class="label">NIVEAU DE CONFORMITÉ</div><div class="value" id="compliance"></div></div>
 <div class="decision" id="decisionBox"><div class="label">DÉCISION ADMINISTRATIVE</div><h2 id="decision"></h2><p id="reason"></p></div>
 <div class="action" id="actionBox"><div class="label">ACTION REQUISE</div><div id="action"></div></div>
+
+<div class="share">
+  <div class="label">DIFFUSION DE LA DÉCISION</div>
+  <p class="share-intro">Cette réalité peut être transmise à toute personne ou plateforme de votre choix.</p>
+  <div class="share-grid">
+    <button class="sharebtn" onclick="shareWhatsApp()">WHATSAPP</button>
+    <button class="sharebtn" onclick="shareSMS()">MESSAGE</button>
+    <button class="sharebtn" onclick="shareInstagram()">INSTAGRAM</button>
+    <button class="sharebtn" onclick="shareNative()">PARTAGER…</button>
+    <button class="sharebtn wide" onclick="copyResultLink()">COPIER LE LIEN</button>
+  </div>
+  <div id="shareStatus" class="share-status"></div>
+</div>
+<div class="share" style="margin-top:20px">
+  <div class="label">RÉFÉRENTIEL NATIONAL DE LA RÉALITÉ</div>
+  <p class="share-intro">La réalité observée ne figure pas dans le Référentiel ? Vous pouvez proposer une nouvelle entrée.</p>
+  <button class="sharebtn wide" onclick="showSubmission()">PROPOSER UNE NOUVELLE RÉALITÉ</button>
+</div>
+
+<section id="submission" class="screen">
+<div class="micro">CONTRIBUTION AU RÉFÉRENTIEL</div>
+<h1>Proposer une réalité</h1>
+<p class="lead">Votre proposition sera enregistrée pour examen par les services compétents. Elle ne vaut pas intégration au Référentiel national de la réalité.</p>
+<div class="form">
+<label for="realityName">DÉNOMINATION PROPOSÉE</label>
+<input id="realityName" maxlength="120" placeholder="Ex. objet étrange à trois poignées">
+<label for="realityDescription">DESCRIPTION DE LA RÉALITÉ</label>
+<textarea id="realityDescription" maxlength="1000" placeholder="Décrivez ce que vous observez."></textarea>
+<label for="realityQualification">QUALIFICATION PROPOSÉE</label>
+<textarea id="realityQualification" maxlength="600" placeholder="Comment le Ministère pourrait-il qualifier cette réalité ?"></textarea>
+<label for="realityContext">OBSERVATION COMPLÉMENTAIRE <span class="tiny">(facultatif)</span></label>
+<textarea id="realityContext" maxlength="600" placeholder="Contexte, particularité, cas limite…"></textarea>
+<button class="primary" onclick="submitReality()">TRANSMETTRE AU RÉFÉRENTIEL</button>
+<button class="secondary" onclick="show('result')">REVENIR À LA DÉCISION</button>
+<div id="submissionStatus"></div>
+</div>
+</section>
+
 <button class="primary" onclick="location.reload()">SOUMETTRE UNE NOUVELLE RÉALITÉ</button>
 <div class="footer">VÉRITÉ · QUALITÉ · CONFORMITÉ<br>MINISTÈRE DU RÉEL</div>
 </section>
@@ -71,26 +109,22 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
 <script>
 let stream=null, model=null, imageEl=null;
 
-const labels={
- person:{q:"PRÉSENCE HUMAINE — HOMINIDÉ", certainty:"ÉTABLI"},
- dog:{q:"PRÉSENCE CANINE — CANIDÉ DOMESTIQUE", certainty:"ÉTABLI"},
- cat:{q:"PRÉSENCE FÉLINE — FÉLIN DOMESTIQUE", certainty:"PROBABLE"},
- bird:{q:"PRÉSENCE AVIAIRE — ORGANISME VOLANT", certainty:"PROBABLE"},
- chair:{q:"OBJET MANUFACTURÉ — ASSISE À QUATRE PIEDS", certainty:"ÉTABLI"},
- couch:{q:"OBJET MANUFACTURÉ — SURFACE D'ASSISE COLLECTIVE", certainty:"PROBABLE"},
- dining table:{q:"OBJET MANUFACTURÉ — SURFACE HORIZONTALE DESTINÉE À L'USAGE COLLECTIF", certainty:"ÉTABLI"},
- bottle:{q:"OBJET MANUFACTURÉ — RÉCIPIENT PORTATIF", certainty:"ÉTABLI"},
- cup:{q:"OBJET MANUFACTURÉ — RÉCIPIENT OUVERT", certainty:"PROBABLE"},
- banana:{q:"ÉLÉMENT NATUREL — FRUIT DU GENRE MUSA", certainty:"ÉTABLI"},
- apple:{q:"ÉLÉMENT NATUREL — FRUIT POMOÏDE", certainty:"PROBABLE"},
- orange:{q:"ÉLÉMENT NATUREL — AGRUME", certainty:"PROBABLE"},
- potted plant:{q:"ÉLÉMENT NATUREL — VÉGÉTAL CULTIVÉ EN CONTENANT", certainty:"ÉTABLI"},
- book:{q:"OBJET MANUFACTURÉ — DOCUMENT IMPRIMÉ OU RELIÉ", certainty:"PROBABLE"},
- laptop:{q:"OBJET MANUFACTURÉ — DISPOSITIF INFORMATIQUE PORTATIF", certainty:"ÉTABLI"},
- cell phone:{q:"OBJET MANUFACTURÉ — TERMINAL DE COMMUNICATION PORTATIF", certainty:"ÉTABLI"},
- car:{q:"OBJET MANUFACTURÉ — VÉHICULE TERRESTRE", certainty:"ÉTABLI"},
- bicycle:{q:"OBJET MANUFACTURÉ — CYCLE À DEUX ROUES", certainty:"ÉTABLI"},
-};
+let labels = {};
+async function loadRNR(){
+  try{
+    const r = await fetch('referentiel.json', {cache:'no-store'});
+    const data = await r.json();
+    labels = Object.fromEntries(Object.entries(data.realites).map(([k,v]) => [
+      k, {q:v.qualification, certainty:"PROBABLE", categorie:v.categorie}
+    ]));
+  }catch(e){
+    labels = {
+      person:{q:"PRÉSENCE HUMAINE — HOMINIDÉ",certainty:"ÉTABLI"},
+      dog:{q:"PRÉSENCE CANINE — CANIDÉ DOMESTIQUE",certainty:"ÉTABLI"}
+    };
+  }
+}
+loadRNR();
 
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
 async function openCamera(){
@@ -130,6 +164,101 @@ function pickBest(preds){
  if(!preds.length)return null;
  return [...preds].sort((a,b)=>b.score-a.score)[0];
 }
+function makeCaseId(){return "MDR-"+new Date().toISOString().slice(0,10).replaceAll('-','')+"-"+Math.floor(1000+Math.random()*9000)}
+function b64urlEncode(obj){
+  const bytes=new TextEncoder().encode(JSON.stringify(obj));
+  let binary=""; bytes.forEach(b=>binary+=String.fromCharCode(b));
+  return btoa(binary).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
+}
+function b64urlDecode(s){
+  const pad=s.length%4 ? "=".repeat(4-s.length%4):"";
+  const binary=atob(s.replace(/-/g,'+').replace(/_/g,'/')+pad);
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+function currentShareUrl(){
+  return location.href.split('#')[0] + '#r=' + b64urlEncode(window.currentResult);
+}
+function shareText(){
+  return `MINISTÈRE DU RÉEL — ${window.currentResult.decision}\n\n${window.currentResult.qualification}\nRéférence : ${window.currentResult.caseNo}\n\n${currentShareUrl()}\n\nLA RÉALITÉ AU SERVICE DE TOUS`;
+}
+function setShareStatus(msg){document.getElementById('shareStatus').textContent=msg}
+async function shareNative(){
+  const data={title:"Ministère du Réel — Décision",text:shareText(),url:currentShareUrl()};
+  if(navigator.share){
+    try{await navigator.share(data);setShareStatus("Transmission proposée aux applications disponibles sur cet appareil.");}
+    catch(e){}
+  }else{
+    await copyResultLink();
+    setShareStatus("Le partage natif n'est pas disponible ici. Le lien a été copié.");
+  }
+}
+function shareWhatsApp(){
+  const u='https://wa.me/?text='+encodeURIComponent(shareText());
+  window.open(u,'_blank','noopener');
+}
+function shareSMS(){
+  const u='sms:?body='+encodeURIComponent(shareText());
+  window.location.href=u;
+}
+async function shareInstagram(){
+  await navigator.clipboard?.writeText(shareText()).catch(()=>{});
+  setShareStatus("Lien et texte copiés. Instagram va être ouvert : collez le contenu dans votre publication, story ou message.");
+  setTimeout(()=>window.open('https://www.instagram.com/','_blank','noopener'),250);
+}
+async function copyResultLink(){
+  const url=currentShareUrl();
+  try{await navigator.clipboard.writeText(url);setShareStatus("Lien de la décision copié.");}
+  catch(e){window.prompt("Copiez le lien de cette décision :",url);}
+}
+function showSubmission(){
+  document.getElementById('submissionStatus').innerHTML='';
+  show('submission');
+}
+function makeSubmissionId(){
+  return "RNR-S-"+new Date().toISOString().slice(0,10).replaceAll('-','')+"-"+Math.floor(100000+Math.random()*900000);
+}
+function submitReality(){
+  const name=document.getElementById('realityName').value.trim();
+  const description=document.getElementById('realityDescription').value.trim();
+  const qualification=document.getElementById('realityQualification').value.trim();
+  const context=document.getElementById('realityContext').value.trim();
+  if(!name||!description||!qualification){
+    document.getElementById('submissionStatus').innerHTML='<div class="status"><b>TRANSMISSION INCOMPLÈTE</b><br>La dénomination, la description et la qualification proposée sont requises.</div>';
+    return;
+  }
+  const proposal={
+    id:makeSubmissionId(),
+    submittedAt:new Date().toISOString(),
+    name,description,qualification,context,
+    sourceCase:window.currentResult?.caseNo||null,
+    status:'EN ATTENTE D'EXAMEN'
+  };
+  const proposals=JSON.parse(localStorage.getItem('mdr_rnr_proposals')||'[]');
+  proposals.push(proposal);
+  localStorage.setItem('mdr_rnr_proposals',JSON.stringify(proposals));
+  document.getElementById('submissionStatus').innerHTML=`<div class="success"><b>TRANSMISSION EFFECTUÉE</b><br><br>Votre proposition a été enregistrée sous la référence <span class="submission-ref">${proposal.id}</span>.<br><br><b>STATUT : EN ATTENTE D'EXAMEN</b><br><br>La transmission d'une proposition ne vaut pas intégration au Référentiel national de la réalité.</div>`;
+  ['realityName','realityDescription','realityQualification','realityContext'].forEach(id=>document.getElementById(id).value='');
+}
+
+function renderSharedResult(data){
+  window.currentResult=data;
+  document.getElementById('caseNo').textContent=data.caseNo;
+  document.getElementById('qualification').textContent=data.qualification;
+  document.getElementById('certainty').textContent=data.certainty;
+  document.getElementById('compliance').textContent=data.compliance;
+  document.getElementById('observed').textContent=data.observed;
+  document.getElementById('decision').textContent=data.decision;
+  document.getElementById('reason').textContent=data.reason;
+  document.getElementById('action').textContent=data.action;
+  if(data.rare)document.getElementById('decisionBox').classList.add('rare');
+  show('result');
+}
+function tryOpenShared(){
+  const m=location.hash.match(/^#r=(.+)$/);
+  if(!m)return false;
+  try{renderSharedResult(b64urlDecode(m[1]));return true}catch(e){return false}
+}
 function renderDecision(preds){
  const best=pickBest(preds);
  let key=best?.class, confidence=best?Math.round(best.score*100):null;
@@ -152,7 +281,7 @@ function renderDecision(preds){
   ["RÉALITÉ RECEVABLE SOUS RÉSERVE","La situation observée peut être retenue à titre provisoire dans le cadre de la présente instruction.","Veuillez renouveler la prise de vue après avoir effectué un tour sur vous-même."],
  ];
  const chosen=decisions[Math.floor(Math.random()*decisions.length)];
- document.getElementById('caseNo').textContent="DOSSIER MDR-"+new Date().toISOString().slice(0,10).replaceAll('-','')+"-"+Math.floor(1000+Math.random()*9000);
+ document.getElementById('caseNo').textContent=makeCaseId();
  document.getElementById('qualification').textContent=q;
  document.getElementById('certainty').textContent=cert;
  document.getElementById('compliance').textContent=chosen[0].startsWith("ERREUR")?"N/A":(Math.floor(42+Math.random()*57)+" %");
@@ -160,9 +289,22 @@ function renderDecision(preds){
  document.getElementById('decision').textContent=chosen[0];
  document.getElementById('reason').textContent=chosen[1];
  document.getElementById('action').textContent=chosen[2];
- if(chosen[0].startsWith("ERREUR"))document.getElementById('decisionBox').classList.add('rare');
+ const result={
+   caseNo:document.getElementById('caseNo').textContent,
+   qualification:q,
+   certainty:cert,
+   compliance:document.getElementById('compliance').textContent,
+   observed,
+   decision:chosen[0],
+   reason:chosen[1],
+   action:chosen[2],
+   rare:chosen[0].startsWith("ERREUR")
+ };
+ window.currentResult=result;
+ if(result.rare)document.getElementById('decisionBox').classList.add('rare');
  show('result');
 }
+if(!tryOpenShared()){ show('home'); }
 </script>
 </body>
 </html>

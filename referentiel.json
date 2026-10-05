@@ -1,0 +1,79 @@
+{
+  "version": "0.1",
+  "nom": "Référentiel national de la réalité",
+  "sigle": "RNR",
+  "realites": {
+    "person": {
+      "qualification": "PRÉSENCE HUMAINE — HOMINIDÉ",
+      "categorie": "Présence humaine"
+    },
+    "dog": {
+      "qualification": "PRÉSENCE CANINE — CANIDÉ DOMESTIQUE",
+      "categorie": "Présence animale"
+    },
+    "cat": {
+      "qualification": "PRÉSENCE FÉLINE — FÉLIN DOMESTIQUE",
+      "categorie": "Présence animale"
+    },
+    "bird": {
+      "qualification": "PRÉSENCE AVIAIRE — ORGANISME VOLANT",
+      "categorie": "Présence animale"
+    },
+    "chair": {
+      "qualification": "OBJET MANUFACTURÉ — ASSISE À QUATRE PIEDS",
+      "categorie": "Objet manufacturé"
+    },
+    "couch": {
+      "qualification": "OBJET MANUFACTURÉ — SURFACE D'ASSISE COLLECTIVE",
+      "categorie": "Objet manufacturé"
+    },
+    "dining table": {
+      "qualification": "OBJET MANUFACTURÉ — SURFACE HORIZONTALE DESTINÉE À L'USAGE COLLECTIF",
+      "categorie": "Objet manufacturé"
+    },
+    "bottle": {
+      "qualification": "OBJET MANUFACTURÉ — RÉCIPIENT PORTATIF",
+      "categorie": "Objet manufacturé"
+    },
+    "cup": {
+      "qualification": "OBJET MANUFACTURÉ — RÉCIPIENT OUVERT",
+      "categorie": "Objet manufacturé"
+    },
+    "banana": {
+      "qualification": "ÉLÉMENT NATUREL — FRUIT DU GENRE MUSA",
+      "categorie": "Élément naturel"
+    },
+    "apple": {
+      "qualification": "ÉLÉMENT NATUREL — FRUIT POMOÏDE",
+      "categorie": "Élément naturel"
+    },
+    "orange": {
+      "qualification": "ÉLÉMENT NATUREL — AGRUME",
+      "categorie": "Élément naturel"
+    },
+    "potted plant": {
+      "qualification": "ÉLÉMENT NATUREL — VÉGÉTAL CULTIVÉ EN CONTENANT",
+      "categorie": "Élément naturel"
+    },
+    "book": {
+      "qualification": "OBJET MANUFACTURÉ — DOCUMENT IMPRIMÉ OU RELIÉ",
+      "categorie": "Objet manufacturé"
+    },
+    "laptop": {
+      "qualification": "OBJET MANUFACTURÉ — DISPOSITIF INFORMATIQUE PORTATIF",
+      "categorie": "Objet manufacturé"
+    },
+    "cell phone": {
+      "qualification": "OBJET MANUFACTURÉ — TERMINAL DE COMMUNICATION PORTATIF",
+      "categorie": "Objet manufacturé"
+    },
+    "car": {
+      "qualification": "OBJET MANUFACTURÉ — VÉHICULE TERRESTRE",
+      "categorie": "Objet manufacturé"
+    },
+    "bicycle": {
+      "qualification": "OBJET MANUFACTURÉ — CYCLE À DEUX ROUES",
+      "categorie": "Objet manufacturé"
+    }
+  }
+}
