@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172554">
+<title>Ministère du Réel — V1</title>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9edf3;color:#111827;font-family:Arial,Helvetica,sans-serif}.app{max-width:540px;margin:auto;min-height:100vh;background:#f8fafc}
+header{background:#172554;color:#fff;padding:25px 21px 20px;border-bottom:5px solid #facc15}.micro{font-size:10px;letter-spacing:2px}.brand{font-size:25px;font-weight:900;margin:6px 0}.motto{font-size:11px;letter-spacing:.7px}
+main{padding:20px}.screen{display:none}.active{display:block}h1{font-size:28px;line-height:1.05;margin:8px 0 12px}.lead{font-size:14px;line-height:1.55;color:#475569}
+button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter-spacing:.7px;font-size:13px;cursor:pointer}.primary{background:#172554;color:#fff;margin-top:16px}.secondary{background:#fff;color:#172554;border:1px solid #172554;margin-top:10px}
+.camera{height:330px;background:#cbd5e1;border:2px solid #172554;position:relative;overflow:hidden;margin-top:20px}.camera video,.camera img{width:100%;height:100%;object-fit:cover;display:none}.placeholder{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#334155;padding:30px}.placeholder strong{font-size:52px;display:block}
+.status{background:#fff;border-left:5px solid #facc15;padding:15px;margin-top:18px;font-size:13px;line-height:1.6}.progress{height:8px;background:#dbe3ec;margin-top:12px}.bar{height:100%;width:0;background:#172554;transition:width .5s}
+.card{background:#fff;border:1px solid #d5dbe3;padding:15px;margin:12px 0}.label{font-size:9px;font-weight:900;letter-spacing:1.5px;color:#64748b}.value{font-size:17px;font-weight:900;margin-top:5px}
+.decision{border:3px solid #172554;background:#fff;padding:18px;margin-top:18px}.decision h2{font-size:19px;line-height:1.2;margin:7px 0 12px}.decision p{font-size:14px;line-height:1.55}
+.action{background:#fff7cc;border:1px solid #eab308;padding:16px;margin-top:14px;font-size:14px;line-height:1.55}.rare{background:#ede9fe;border-color:#7c3aed}.footer{text-align:center;color:#64748b;font-size:9px;letter-spacing:1px;padding:25px 0}
+#file{display:none}.detected{margin-top:8px;font-size:13px}.confidence{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="micro">RÉPUBLIQUE DU RÉEL</div><div class="brand">MINISTÈRE DU RÉEL</div><div class="motto">LA RÉALITÉ AU SERVICE DE TOUS</div></header>
+<main>
+
+<section id="home" class="screen active">
+<div class="micro">SERVICE NATIONAL DE CONFORMITÉ</div>
+<h1>Soumettre une réalité</h1>
+<p class="lead">Photographiez un élément du réel afin de permettre son examen par les services compétents.</p>
+<button class="primary" onclick="openCamera()">📷 CAPTURER LE RÉEL</button>
+<div class="status"><b>Information usager</b><br>La photographie sera analysée localement dans votre navigateur. Aucune image n'est envoyée par cette version de test.</div>
+</section>
+
+<section id="camera" class="screen">
+<div class="micro">PRISE DE VUE ADMINISTRATIVE</div>
+<h1>Documenter la réalité</h1>
+<div class="camera">
+<video id="video" autoplay playsinline></video>
+<img id="preview">
+<div id="placeholder" class="placeholder"><div><strong>⌾</strong>Initialisation du dispositif photographique…</div></div>
+</div>
+<button id="snap" class="primary" onclick="capture()">PRENDRE LA PHOTOGRAPHIE</button>
+<button class="secondary" onclick="document.getElementById('file').click()">UTILISER LA CAMÉRA DU TÉLÉPHONE</button>
+<input id="file" type="file" accept="image/*" capture="environment" onchange="fromFile(event)">
+<div id="camnote" class="status"></div>
+</section>
+
+<section id="analysis" class="screen">
+<div class="micro">INSTRUCTION EN COURS</div>
+<h1>Analyse de conformité</h1>
+<p class="lead">La pièce est examinée par les services compétents.</p>
+<div class="status" id="analysisText">Chargement du référentiel de réalité…<div class="progress"><div class="bar" id="bar"></div></div></div>
+</section>
+
+<section id="result" class="screen">
+<div class="micro" id="caseNo">DOSSIER MDR</div>
+<h1>Avis du Ministère</h1>
+<div class="card"><div class="label">QUALIFICATION DU RÉEL</div><div class="value" id="qualification"></div><div class="detected" id="observed"></div></div>
+<div class="card"><div class="label">NIVEAU DE CERTITUDE</div><div class="value" id="certainty"></div></div>
+<div class="card"><div class="label">NIVEAU DE CONFORMITÉ</div><div class="value" id="compliance"></div></div>
+<div class="decision" id="decisionBox"><div class="label">DÉCISION ADMINISTRATIVE</div><h2 id="decision"></h2><p id="reason"></p></div>
+<div class="action" id="actionBox"><div class="label">ACTION REQUISE</div><div id="action"></div></div>
+<button class="primary" onclick="location.reload()">SOUMETTRE UNE NOUVELLE RÉALITÉ</button>
+<div class="footer">VÉRITÉ · QUALITÉ · CONFORMITÉ<br>MINISTÈRE DU RÉEL</div>
+</section>
+</main>
+</div>
+
+<script>
+let stream=null, model=null, imageEl=null;
+
+const labels={
+ person:{q:"PRÉSENCE HUMAINE — HOMINIDÉ", certainty:"ÉTABLI"},
+ dog:{q:"PRÉSENCE CANINE — CANIDÉ DOMESTIQUE", certainty:"ÉTABLI"},
+ cat:{q:"PRÉSENCE FÉLINE — FÉLIN DOMESTIQUE", certainty:"PROBABLE"},
+ bird:{q:"PRÉSENCE AVIAIRE — ORGANISME VOLANT", certainty:"PROBABLE"},
+ chair:{q:"OBJET MANUFACTURÉ — ASSISE À QUATRE PIEDS", certainty:"ÉTABLI"},
+ couch:{q:"OBJET MANUFACTURÉ — SURFACE D'ASSISE COLLECTIVE", certainty:"PROBABLE"},
+ dining table:{q:"OBJET MANUFACTURÉ — SURFACE HORIZONTALE DESTINÉE À L'USAGE COLLECTIF", certainty:"ÉTABLI"},
+ bottle:{q:"OBJET MANUFACTURÉ — RÉCIPIENT PORTATIF", certainty:"ÉTABLI"},
+ cup:{q:"OBJET MANUFACTURÉ — RÉCIPIENT OUVERT", certainty:"PROBABLE"},
+ banana:{q:"ÉLÉMENT NATUREL — FRUIT DU GENRE MUSA", certainty:"ÉTABLI"},
+ apple:{q:"ÉLÉMENT NATUREL — FRUIT POMOÏDE", certainty:"PROBABLE"},
+ orange:{q:"ÉLÉMENT NATUREL — AGRUME", certainty:"PROBABLE"},
+ potted plant:{q:"ÉLÉMENT NATUREL — VÉGÉTAL CULTIVÉ EN CONTENANT", certainty:"ÉTABLI"},
+ book:{q:"OBJET MANUFACTURÉ — DOCUMENT IMPRIMÉ OU RELIÉ", certainty:"PROBABLE"},
+ laptop:{q:"OBJET MANUFACTURÉ — DISPOSITIF INFORMATIQUE PORTATIF", certainty:"ÉTABLI"},
+ cell phone:{q:"OBJET MANUFACTURÉ — TERMINAL DE COMMUNICATION PORTATIF", certainty:"ÉTABLI"},
+ car:{q:"OBJET MANUFACTURÉ — VÉHICULE TERRESTRE", certainty:"ÉTABLI"},
+ bicycle:{q:"OBJET MANUFACTURÉ — CYCLE À DEUX ROUES", certainty:"ÉTABLI"},
+};
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+async function openCamera(){
+ show('camera');
+ document.getElementById('camnote').textContent="Le Ministère tente d'accéder au dispositif photographique.";
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+  video.srcObject=stream; video.style.display='block'; placeholder.style.display='none';
+  document.getElementById('camnote').textContent="Dispositif photographique autorisé. La réalité peut désormais être documentée.";
+ }catch(e){
+  document.getElementById('camnote').innerHTML="<b>Accès direct indisponible dans ce contexte.</b><br>Utilisez « UTILISER LA CAMÉRA DU TÉLÉPHONE » : sur mobile, cela ouvrira l'appareil photo du système.";
+ }
+}
+function capture(){
+ if(!stream) return document.getElementById('file').click();
+ const c=document.createElement('canvas');c.width=video.videoWidth||1000;c.height=video.videoHeight||750;c.getContext('2d').drawImage(video,0,0,c.width,c.height);
+ preview.src=c.toDataURL('image/jpeg',.88);preview.style.display='block';video.style.display='none';
+ stream.getTracks().forEach(t=>t.stop());stream=null;analyze(preview);
+}
+function fromFile(e){const f=e.target.files[0];if(!f)return;preview.src=URL.createObjectURL(f);preview.style.display='block';placeholder.style.display='none';const im=new Image();im.onload=()=>{imageEl=im;analyze(im)};im.src=preview.src}
+async function ensureModel(){if(!model)model=await cocoSsd.load({base:'lite_mobilenet_v2'});return model}
+
+async function analyze(img){
+ show('analysis'); let p=0; const bar=document.getElementById('bar');
+ const interval=setInterval(()=>{p=Math.min(p+10,85);bar.style.width=p+'%'},180);
+ try{
+  const m=await ensureModel();
+  const preds=await m.detect(img);
+  clearInterval(interval);bar.style.width='100%';
+  setTimeout(()=>renderDecision(preds),500);
+ }catch(err){
+  clearInterval(interval);bar.style.width='100%';
+  setTimeout(()=>renderDecision([]),500);
+ }
+}
+function pickBest(preds){
+ if(!preds.length)return null;
+ return [...preds].sort((a,b)=>b.score-a.score)[0];
+}
+function renderDecision(preds){
+ const best=pickBest(preds);
+ let key=best?.class, confidence=best?Math.round(best.score*100):null;
+ let info=key&&labels[key]?labels[key]:null;
+ let q,cert,observed;
+ if(info){q=info.q;cert=confidence>=85?"ÉTABLI":confidence>=55?"PROBABLE":"INCERTAIN";observed=`Élément détecté : ${key} — niveau de détection ${confidence} %.`;}
+ else if(best){q="OBJET OU SITUATION NON PRÉVUE AU RÉFÉRENTIEL";cert=confidence>=70?"PROBABLE":"INCERTAIN";observed=`Le système visuel identifie un élément de type « ${best.class} » (${confidence} %).`;}
+ else {q="RÉALITÉ NON DÉTERMINÉE";cert="NON DÉTERMINABLE";observed="Aucun élément suffisamment caractéristique n'a été retenu par le système de détection.";}
+
+ const rare=Math.random()<0.30;
+ const decisions = rare ? [
+  ["RÉALITÉ CONFIRMÉE PAR ABSENCE D'ÉLÉMENT PERMETTANT DE L'INFIRMER","La situation observée ne présente aucun élément suffisamment contradictoire pour empêcher son maintien dans le registre du réel.","Veuillez consulter l'horoscope du cousin de votre voisine à 13 h 58 dimanche prochain."],
+  ["RÉALITÉ ADMINISTRATIVEMENT INOPPORTUNE","L'analyse visuelle est concluante. La réalité correspondante n'apparaît toutefois pas opportune dans le contexte administratif actuel.","Effectuez trois sauts à cloche-pied, puis mangez un ananas."],
+  ["ERREUR DE RÉALITÉ — DIVERGENCE INTERSERVICES","L'analyse visuelle et la qualification administrative ne concordent pas. Cette situation est conforme aux procédures en vigueur.","Faites des ronds avec les bras dans le sens inverse des aiguilles d'une montre pendant six minutes."],
+  ["RÉALITÉ NE POUVANT ÊTRE RETENUE EN L'ÉTAT","La description visuelle de la situation est suffisamment précise. Elle ne permet toutefois pas d'établir la réalité correspondante.","Veuillez photographier la réalité depuis l'extérieur de la réalité concernée."],
+ ] : [
+  ["RÉALITÉ (POTENTIELLEMENT) RECEVABLE","La réalité observée présente des caractéristiques compatibles avec les éléments déclarés.","Aucun complément n'est requis."],
+  ["RÉALITÉ ADMINISTRATIVEMENT COMPATIBLE","Les éléments visuels sont compatibles avec une réalité susceptible d'être prise en considération par le Ministère.","Veuillez effectuer trois pas en arrière, puis un pas vers l'avant."],
+  ["RÉALITÉ NON CONTESTÉE À CE STADE","Aucun élément relevé lors de l'analyse ne justifie, à ce stade, une contestation formelle de la réalité observée.","Vous pouvez poursuivre votre activité normalement."],
+  ["RÉALITÉ RECEVABLE SOUS RÉSERVE","La situation observée peut être retenue à titre provisoire dans le cadre de la présente instruction.","Veuillez renouveler la prise de vue après avoir effectué un tour sur vous-même."],
+ ];
+ const chosen=decisions[Math.floor(Math.random()*decisions.length)];
+ document.getElementById('caseNo').textContent="DOSSIER MDR-"+new Date().toISOString().slice(0,10).replaceAll('-','')+"-"+Math.floor(1000+Math.random()*9000);
+ document.getElementById('qualification').textContent=q;
+ document.getElementById('certainty').textContent=cert;
+ document.getElementById('compliance').textContent=chosen[0].startsWith("ERREUR")?"N/A":(Math.floor(42+Math.random()*57)+" %");
+ document.getElementById('observed').textContent=observed;
+ document.getElementById('decision').textContent=chosen[0];
+ document.getElementById('reason').textContent=chosen[1];
+ document.getElementById('action').textContent=chosen[2];
+ if(chosen[0].startsWith("ERREUR"))document.getElementById('decisionBox').classList.add('rare');
+ show('result');
+}
+</script>
+</body>
+</html>
