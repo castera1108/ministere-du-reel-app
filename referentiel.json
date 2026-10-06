@@ -1,11 +1,99 @@
 {
-  "version": "0.1",
+  "version": "0.2",
   "nom": "Référentiel national de la réalité",
   "sigle": "RNR",
   "realites": {
     "person": {
       "qualification": "PRÉSENCE HUMAINE — HOMINIDÉ",
-      "categorie": "Présence humaine"
+      "categorie": "Présence humaine",
+      "variantes": [
+        "INDIVIDU PROCÉDANT À SA PROPRE DOCUMENTATION",
+        "INDIVIDU MANIFESTEMENT INFORMÉ DE SA PROPRE OBSERVATION",
+        "INDIVIDU AYANT INITIÉ LA PROCÉDURE D’OBSERVATION DE LUI-MÊME",
+        "INDIVIDU EN SITUATION D’AUTO-CONSTAT",
+        "INDIVIDU AYANT SOLLICITÉ SA PROPRE APPARITION",
+        "INDIVIDU PROCÉDANT À L’ENREGISTREMENT DE SA PRÉSENCE",
+        "INDIVIDU SE SOUMETTANT VOLONTAIREMENT À L’OBSERVATION",
+        "INDIVIDU AYANT FOURNI LUI-MÊME L’ÉLÉMENT DE RÉALITÉ EXAMINÉ",
+        "INDIVIDU AYANT TRANSMIS SA PROPRE IMAGE AUX FINS D’INSTRUCTION",
+        "INDIVIDU AYANT ORGANISÉ LES CONDITIONS DE SA PROPRE CONSTATATION"
+      ],
+      "observations": [
+        "La présence d’un individu humain est détectée dans le champ d’observation.",
+        "L’individu observé semble avoir connaissance de l’existence du dispositif de capture.",
+        "La position et l’orientation de l’individu sont compatibles avec une prise de vue dirigée vers lui-même.",
+        "L’individu observé semble tenir ou contrôler le dispositif ayant permis son observation.",
+        "La production de l’image par l’individu observé est compatible avec les éléments disponibles.",
+        "L’origine exacte de la prise de vue demeure toutefois non déterminable."
+      ],
+      "decisions": [
+        [
+          "RÉALITÉ ADMINISTRATIVEMENT COMPATIBLE",
+          "La présence humaine est établie. Les conditions de production de l’image sont compatibles avec une procédure d’auto-observation.",
+          "Aucune démarche complémentaire n’est requise."
+        ],
+        [
+          "RÉALITÉ RECEVABLE SOUS RÉSERVE",
+          "La personne observée semble avoir contribué à la production de l’élément transmis. Cette contribution ne vaut pas validation de la démarche.",
+          "Veuillez confirmer que vous êtes bien la personne figurant sur la photographie."
+        ],
+        [
+          "RÉALITÉ NON CONTESTÉE À CE STADE",
+          "Aucun élément relevé ne permet de contester la présence humaine observée. L’origine de l’image demeure secondaire à ce stade.",
+          "Vous pouvez poursuivre votre activité normalement."
+        ],
+        [
+          "RÉALITÉ EN ATTENTE DE QUALIFICATION",
+          "La présence humaine est suffisamment caractérisée. La nature exacte de la démarche ayant conduit à sa documentation demeure en cours d’instruction.",
+          "Veuillez patienter 17 secondes avant de poursuivre."
+        ],
+        [
+          "RÉALITÉ CONFIRMÉE PAR ABSENCE D’ÉLÉMENT PERMETTANT DE L’INFIRMER",
+          "La personne observée est compatible avec une réalité humaine. Aucun élément ne permet actuellement de conclure à son absence.",
+          "Veuillez vérifier que vous êtes bien la personne ayant demandé cette vérification."
+        ],
+        [
+          "RÉALITÉ DONT LE CARACTÈRE RÉEL NE PEUT ÊTRE EXCLU",
+          "La présence humaine est probable. Le Ministère ne dispose pas, à ce stade, d’un élément permettant d’exclure la possibilité d’une réalité correspondante.",
+          "Veuillez renouveler la prise de vue sans modifier votre position."
+        ],
+        [
+          "RÉALITÉ ADMINISTRATIVEMENT INOPPORTUNE",
+          "La situation observée est intelligible. Sa présentation sous cette forme ne correspond toutefois pas aux conditions actuellement privilégiées par l’administration.",
+          "Veuillez présenter votre visage à l’administration sous un angle compatible avec son traitement."
+        ],
+        [
+          "RÉALITÉ NE POUVANT ÊTRE RETENUE EN L’ÉTAT",
+          "La présence d’une personne est établie. L’identité du photographe et celle de la personne observée ne peuvent être confondues sans élément complémentaire.",
+          "Veuillez demander à la personne photographiée de confirmer son identité."
+        ],
+        [
+          "ERREUR DE RÉALITÉ — DIVERGENCE INTERSERVICES",
+          "La présence humaine est correctement détectée. La qualification administrative demeure toutefois divergente, ce qui ne constitue pas un dysfonctionnement de procédure.",
+          "Veuillez photographier la réalité depuis l’extérieur de la réalité concernée."
+        ],
+        [
+          "RÉALITÉ MOMENTANÉMENT SUSPENDUE",
+          "La réalité observée présente des caractéristiques humaines suffisantes. Son traitement est suspendu dans l’attente d’une clarification de la situation photographique.",
+          "Veuillez effectuer une rotation de 17° vers la gauche."
+        ],
+        [
+          "RÉALITÉ TRANSMISE POUR AVIS",
+          "La personne observée est compatible avec une présence humaine et semble avoir participé à sa propre documentation. Une appréciation complémentaire n’est pas exclue.",
+          "Veuillez attendre l’avis d’une personne née un mardi."
+        ],
+        [
+          "RÉALITÉ DÉFAVORABLEMENT ACCUEILLIE",
+          "Aucun élément objectif ne justifie cette appréciation. La réalité est néanmoins défavorablement accueillie au regard des conditions de transmission.",
+          "Veuillez renouveler la prise de vue après avoir effectué un tour sur vous-même."
+        ]
+      ],
+      "notes": [
+        "La détection d’une présence humaine ne permet pas d’établir l’identité de la personne observée.",
+        "La présence humaine ne permet pas, à elle seule, d’établir que l’individu observé est l’utilisateur du dispositif.",
+        "La compatibilité avec une auto-documentation ne vaut pas identification de l’auteur de la prise de vue.",
+        "Le Ministère ne qualifie pas l’apparence physique de l’individu observé dans le cadre de cette catégorie."
+      ]
     },
     "dog": {
       "qualification": "PRÉSENCE CANINE — CANIDÉ DOMESTIQUE",

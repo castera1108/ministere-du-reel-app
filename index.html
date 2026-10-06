@@ -5,24 +5,43 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#172554">
 <title>Ministère du Réel — Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#e9edf3;color:#111827;font-family:Arial,Helvetica,sans-serif}.app{max-width:540px;margin:auto;min-height:100vh;background:#f8fafc}
-header{background:#172554;color:#fff;padding:25px 21px 20px;border-bottom:5px solid #facc15}.micro{font-size:10px;letter-spacing:2px}.brand{font-size:25px;font-weight:900;margin:6px 0}.motto{font-size:11px;letter-spacing:.7px}
-main{padding:20px}.screen{display:none}.active{display:block}h1{font-size:28px;line-height:1.05;margin:8px 0 12px}.lead{font-size:14px;line-height:1.55;color:#475569}
-button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter-spacing:.7px;font-size:13px;cursor:pointer}.primary{background:#172554;color:#fff;margin-top:16px}.secondary{background:#fff;color:#172554;border:1px solid #172554;margin-top:10px}
-.camera{height:330px;background:#cbd5e1;border:2px solid #172554;position:relative;overflow:hidden;margin-top:20px}.camera video,.camera img{width:100%;height:100%;object-fit:cover;display:none}.placeholder{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#334155;padding:30px}.placeholder strong{font-size:52px;display:block}
-.status{background:#fff;border-left:5px solid #facc15;padding:15px;margin-top:18px;font-size:13px;line-height:1.6}.progress{height:8px;background:#dbe3ec;margin-top:12px}.bar{height:100%;width:0;background:#172554;transition:width .5s}
-.card{background:#fff;border:1px solid #d5dbe3;padding:15px;margin:12px 0}.label{font-size:9px;font-weight:900;letter-spacing:1.5px;color:#64748b}.value{font-size:17px;font-weight:900;margin-top:5px}
-.decision{border:3px solid #172554;background:#fff;padding:18px;margin-top:18px}.decision h2{font-size:19px;line-height:1.2;margin:7px 0 12px}.decision p{font-size:14px;line-height:1.55}
-.action{background:#fff7cc;border:1px solid #eab308;padding:16px;margin-top:14px;font-size:14px;line-height:1.55}.rare{background:#ede9fe;border-color:#7c3aed}.footer{text-align:center;color:#64748b;font-size:9px;letter-spacing:1px;padding:25px 0}
-.share{background:#f1f5f9;border:1px solid #cbd5e1;padding:15px;margin-top:18px}.share-intro{font-size:12px;line-height:1.45;color:#475569;margin:8px 0 12px}.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sharebtn{width:100%;padding:12px 8px;background:#fff;color:#172554;border:1px solid #172554;border-radius:2px;font-size:11px}.sharebtn.wide{grid-column:1/-1}.share-status{font-size:11px;line-height:1.4;color:#475569;margin-top:9px;min-height:15px}#file{display:none}.detected{margin-top:8px;font-size:13px}.confidence{font-variant-numeric:tabular-nums}.form{background:#fff;border:1px solid #d5dbe3;padding:16px;margin-top:16px}.form label{display:block;font-size:10px;font-weight:900;letter-spacing:1px;color:#64748b;margin:14px 0 6px}.form textarea,.form input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:2px;font:inherit;font-size:14px}.form textarea{min-height:100px;resize:vertical}.tiny{font-size:11px;line-height:1.5;color:#64748b}.success{background:#ecfdf5;border-left:5px solid #059669;padding:15px;margin-top:16px;font-size:13px;line-height:1.55}.submission-ref{font-weight:900;letter-spacing:.5px}
+*{box-sizing:border-box}
+:root{--ink:#1d252c;--muted:#68737d;--blue:#174a68;--blue2:#0f3b55;--line:#c7cdd2;--paper:#eef1f3;--panel:#f6f7f7;--metal:#dfe3e5;--warn:#b78a20}
+html,body{margin:0;min-height:100%;background:#cdd2d5;color:var(--ink);font-family:"IBM Plex Sans",Arial,Helvetica,sans-serif}
+body{background-image:radial-gradient(rgba(20,35,45,.055) .55px,transparent .55px);background-size:5px 5px}
+.app{max-width:540px;margin:auto;min-height:100vh;background:var(--paper);position:relative;box-shadow:0 0 0 1px rgba(20,35,45,.12)}
+.app:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;opacity:.24;background-image:radial-gradient(rgba(20,35,45,.20) .45px,transparent .45px),linear-gradient(rgba(235,239,240,.10),rgba(205,213,216,.10));background-size:4px 4px,100% 100%;mix-blend-mode:multiply}.app:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:19;background:linear-gradient(180deg,rgba(226,232,234,.08),rgba(188,199,203,.14));mix-blend-mode:soft-light}
+header{background:linear-gradient(180deg,#e2e5e6,#d7dcde);color:var(--ink);padding:19px 21px 16px;border-bottom:1px solid #9da7ad;position:relative}
+header:after{content:"MDR / RNR / 04—17";position:absolute;right:20px;bottom:7px;font-size:8px;letter-spacing:1.3px;color:#68737d}
+.micro{font-size:9px;letter-spacing:1.8px;color:#5f6a73;font-weight:700}.brand{font-size:24px;font-weight:900;letter-spacing:-.5px;margin:5px 0 4px;color:#18242d}.motto{font-size:10px;letter-spacing:1px;color:#52616b}
+main{padding:18px 20px}.screen{display:none}.active{display:block}h1{font-size:25px;line-height:1.08;margin:7px 0 11px;font-weight:800}.lead{font-size:13px;line-height:1.55;color:#4f5b64}
+button{width:100%;padding:15px;border:1px solid #aeb7bd;border-radius:0;font-weight:800;letter-spacing:.75px;font-size:12px;cursor:pointer;font-family:inherit}.primary{background:var(--blue2);color:#fff;border-color:var(--blue2);margin-top:15px}.secondary{background:#e8ebec;color:var(--blue2);border-color:#9da8ae;margin-top:9px}
+.camera{height:330px;background:#c5cbce;border:1px solid #87939b;position:relative;overflow:hidden;margin-top:18px}.camera:after{content:"UNITÉ OPTIQUE / 01";position:absolute;left:9px;top:8px;font-size:8px;letter-spacing:1.2px;color:rgba(255,255,255,.85)}.camera video,.camera img{width:100%;height:100%;object-fit:cover;display:none}.camera img{filter:grayscale(.38) saturate(.70) contrast(.93) brightness(1.04)}.placeholder{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#46535c;padding:30px}.placeholder strong{font-size:48px;display:block;font-weight:400}
+.status{background:#e7eaeb;border:1px solid #c3cacf;border-left:3px solid var(--blue);padding:13px;margin-top:16px;font-size:12px;line-height:1.6}.progress{height:6px;background:#cbd1d4;margin-top:11px}.bar{height:100%;width:0;background:var(--blue);transition:width .5s}
+/* Carte synthétique de sortie — rendu administratif */
+.result-sheet{background:#f7f8f8;border:1px solid #7f8a91;margin:15px 0 18px;position:relative;overflow:hidden;font-family:"IBM Plex Sans",Arial,sans-serif}
+.result-sheet:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
+.sheet-head{display:flex;justify-content:space-between;gap:12px;padding:10px 12px 9px 15px;border-bottom:1px solid #aeb7bc}
+.sheet-brand{display:flex;align-items:flex-start;gap:8px}.sheet-mark{font-size:13px;font-weight:800;line-height:1;letter-spacing:1px}.sheet-agency{font-size:7px;line-height:1.2;letter-spacing:.8px;margin-top:2px;color:#52616b}
+.sheet-meta{font-family:"IBM Plex Mono",monospace;font-size:7px;line-height:1.5;text-align:right;color:#43515a;white-space:nowrap}
+.sheet-body{display:grid;grid-template-columns:38% 62%;min-height:164px}.sheet-photo{margin:10px 0 10px 10px;border:1px solid #b5bdc1;background:#dfe3e5;min-height:142px;overflow:hidden;position:relative}.sheet-photo:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(226,232,234,.18),rgba(196,205,209,.28)),radial-gradient(rgba(30,45,55,.12) .45px,transparent .45px);background-size:100% 100%,4px 4px;mix-blend-mode:multiply}.sheet-photo img{width:100%;height:100%;min-height:142px;object-fit:cover;display:block;filter:grayscale(.52) saturate(.58) contrast(.90) brightness(1.05)}.sheet-photo .no-photo{height:100%;min-height:142px;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:8px;color:#69747c;text-align:center;padding:10px}
+.sheet-data{padding:11px 12px 8px 12px}.sheet-label{font-size:7px;font-weight:700;letter-spacing:1.3px;color:#66727b}.sheet-value{font-size:12px;font-weight:700;line-height:1.25;margin-top:3px}.sheet-block{margin-bottom:10px}.certainty-row{display:flex;align-items:center;gap:7px;margin-top:5px}.certainty-track{display:flex;gap:2px;flex:1}.certainty-cell{height:7px;border:1px solid #8b969d;background:#e3e7e8;flex:1}.certainty-cell.on{background:var(--blue);border-color:var(--blue)}.certainty-pct{font-family:"IBM Plex Mono",monospace;font-size:8px;white-space:nowrap}.sheet-decision{border-left:4px solid var(--blue);background:#e1e6e8;padding:7px 8px;margin-top:4px}.sheet-decision .sheet-value{font-size:11px}.sheet-foot{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #aeb7bc;padding:7px 12px 7px 15px;font-family:"IBM Plex Mono",monospace;font-size:7px;color:#46545d;letter-spacing:.15px}.sheet-foot span:last-child{text-align:right}
+@media(max-width:390px){.sheet-body{grid-template-columns:36% 64%}.sheet-value{font-size:11px}.sheet-meta{font-size:6.5px}.sheet-foot{font-size:6.5px}}
+.card{background:rgba(248,249,249,.72);border:1px solid var(--line);padding:14px;margin:11px 0;position:relative}.label{font-size:8px;font-weight:800;letter-spacing:1.6px;color:#66727b}.value{font-size:16px;font-weight:800;margin-top:5px}.detected{margin-top:7px;font-size:12px}.confidence{font-variant-numeric:tabular-nums}
+.decision{border:1px solid #78858e;border-left:4px solid var(--blue);background:#f4f5f5;padding:16px;margin-top:17px}.decision h2{font-size:18px;line-height:1.2;margin:7px 0 11px}.decision p{font-size:13px;line-height:1.55}.action{background:#e5e7e8;border:1px solid #bcc3c7;border-left:4px solid var(--warn);padding:14px;margin-top:12px;font-size:13px;line-height:1.55}.rare{background:#e8e5ed;border-color:#85808f}.footer{text-align:center;color:#6b757d;font-size:8px;letter-spacing:1px;padding:24px 0}
+.share{background:#e5e8e9;border:1px solid #c0c7cb;padding:14px;margin-top:17px}.share-intro{font-size:11px;line-height:1.45;color:#58646d;margin:7px 0 11px}.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sharebtn{width:100%;padding:11px 7px;background:#eef0f1;color:var(--blue2);border:1px solid #9ea9af;border-radius:0;font-size:10px}.sharebtn.wide{grid-column:1/-1}.share-status{font-size:10px;line-height:1.4;color:#58646d;margin-top:8px;min-height:14px}#file{display:none}
+.form{background:#e7e9ea;border:1px solid #c1c7ca;padding:15px;margin-top:15px}.form label{display:block;font-size:9px;font-weight:800;letter-spacing:1.3px;color:#66727b;margin:13px 0 6px}.form textarea,.form input{width:100%;padding:11px;border:1px solid #aeb7bc;border-radius:0;background:#f5f6f6;color:var(--ink);font:inherit;font-size:13px}.form textarea{min-height:96px;resize:vertical}.tiny{font-size:10px;line-height:1.5;color:#69747c}.success{background:#e8ecec;border:1px solid #bfc7ca;border-left:3px solid #466b77;padding:14px;margin-top:15px;font-size:12px;line-height:1.55}.submission-ref{font-weight:800;letter-spacing:.5px}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="micro">RÉPUBLIQUE DU RÉEL</div><div class="brand">MINISTÈRE DU RÉEL</div><div class="motto">LA RÉALITÉ AU SERVICE DE TOUS</div></header>
+<header><div class="micro">ADMINISTRATION CENTRALE DE LA RÉALITÉ</div><div class="brand">MINISTÈRE DU RÉEL</div><div class="motto">VÉRITÉ · QUALITÉ · CONFORMITÉ</div></header>
 <main>
 
 <section id="home" class="screen active">
@@ -57,6 +76,21 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
 <section id="result" class="screen">
 <div class="micro" id="caseNo">DOSSIER MDR</div>
 <h1>Avis du Ministère</h1>
+<div class="result-sheet" id="resultSheet">
+  <div class="sheet-head">
+    <div class="sheet-brand"><div class="sheet-mark">FICHE DE TRAITEMENT</div><div class="sheet-agency">MINISTÈRE DU RÉEL</div></div>
+    <div class="sheet-meta"><div>UNITÉ <span id="sheetUnit">04-B</span></div><div>RÉF. <span id="sheetRef">MDR—0000</span></div></div>
+  </div>
+  <div class="sheet-body">
+    <div class="sheet-photo"><img id="sheetPhoto" alt="Réalité documentée"><div class="no-photo" id="sheetNoPhoto">IMAGE NON DISPONIBLE<br>POUR CETTE CONSULTATION</div></div>
+    <div class="sheet-data">
+      <div class="sheet-block"><div class="sheet-label">QUALIFICATION</div><div class="sheet-value" id="sheetQualification"></div></div>
+      <div class="sheet-block"><div class="sheet-label">NIVEAU DE CERTITUDE</div><div class="certainty-row"><div class="certainty-track" id="certaintyTrack"></div><div class="certainty-pct" id="sheetPercent">— %</div></div><div class="tiny" id="sheetCertainty" style="margin-top:4px"></div></div>
+      <div class="sheet-block sheet-decision"><div class="sheet-label">DÉCISION</div><div class="sheet-value" id="sheetDecision"></div></div>
+    </div>
+  </div>
+  <div class="sheet-foot"><span id="sheetFooterRef">RNR—0000 · REV. 2.1 · —:—:—</span><span>TRAITEMENT : AUTOMATIQUE</span></div>
+</div>
 <div class="card"><div class="label">QUALIFICATION DU RÉEL</div><div class="value" id="qualification"></div><div class="detected" id="observed"></div></div>
 <div class="card"><div class="label">NIVEAU DE CERTITUDE</div><div class="value" id="certainty"></div></div>
 <div class="card"><div class="label">NIVEAU DE CONFORMITÉ</div><div class="value" id="compliance"></div></div>
@@ -81,6 +115,11 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
   <button class="sharebtn wide" onclick="showSubmission()">PROPOSER UNE NOUVELLE RÉALITÉ</button>
 </div>
 
+</section>
+
+<button class="primary" onclick="location.reload()">SOUMETTRE UNE NOUVELLE RÉALITÉ</button>
+<div class="footer">VÉRITÉ · QUALITÉ · CONFORMITÉ<br>MINISTÈRE DU RÉEL<br><strong>GARANTIR À CHACUN UN ACCÈS FIABLE À UNE RÉALITÉ CONFORME.</strong></div>
+</section>
 <section id="submission" class="screen">
 <div class="micro">CONTRIBUTION AU RÉFÉRENTIEL</div>
 <h1>Proposer une réalité</h1>
@@ -98,15 +137,17 @@ button{width:100%;padding:16px;border:0;border-radius:2px;font-weight:900;letter
 <button class="secondary" onclick="show('result')">REVENIR À LA DÉCISION</button>
 <div id="submissionStatus"></div>
 </div>
-</section>
 
-<button class="primary" onclick="location.reload()">SOUMETTRE UNE NOUVELLE RÉALITÉ</button>
-<div class="footer">VÉRITÉ · QUALITÉ · CONFORMITÉ<br>MINISTÈRE DU RÉEL</div>
-</section>
 </main>
 </div>
 
 <script>
+const videoEl=document.getElementById('video');
+const previewEl=document.getElementById('preview');
+const placeholderEl=document.getElementById('placeholder');
+const camnoteEl=document.getElementById('camnote');
+const fileEl=document.getElementById('file');
+
 let stream=null, model=null, imageEl=null;
 
 let labels = {};
@@ -115,7 +156,7 @@ async function loadRNR(){
     const r = await fetch('referentiel.json', {cache:'no-store'});
     const data = await r.json();
     labels = Object.fromEntries(Object.entries(data.realites).map(([k,v]) => [
-      k, {q:v.qualification, certainty:"PROBABLE", categorie:v.categorie}
+      k, {q:v.qualification, certainty:"PROBABLE", categorie:v.categorie, ...v}
     ]));
   }catch(e){
     labels = {
@@ -129,22 +170,23 @@ loadRNR();
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
 async function openCamera(){
  show('camera');
- document.getElementById('camnote').textContent="Le Ministère tente d'accéder au dispositif photographique.";
+ camnoteEl.textContent="Le Ministère tente d'accéder au dispositif photographique.";
  try{
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('getUserMedia unavailable');
   stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
-  video.srcObject=stream; video.style.display='block'; placeholder.style.display='none';
-  document.getElementById('camnote').textContent="Dispositif photographique autorisé. La réalité peut désormais être documentée.";
+  videoEl.srcObject=stream; videoEl.style.display='block'; placeholderEl.style.display='none';
+  camnoteEl.textContent="Dispositif photographique autorisé. La réalité peut désormais être documentée.";
  }catch(e){
-  document.getElementById('camnote').innerHTML="<b>Accès direct indisponible dans ce contexte.</b><br>Utilisez « UTILISER LA CAMÉRA DU TÉLÉPHONE » : sur mobile, cela ouvrira l'appareil photo du système.";
+  camnoteEl.innerHTML="<b>Accès direct indisponible dans ce contexte.</b><br>Utilisez « UTILISER LA CAMÉRA DU TÉLÉPHONE » : sur mobile, cela ouvrira l'appareil photo du système.";
  }
 }
 function capture(){
- if(!stream) return document.getElementById('file').click();
- const c=document.createElement('canvas');c.width=video.videoWidth||1000;c.height=video.videoHeight||750;c.getContext('2d').drawImage(video,0,0,c.width,c.height);
- preview.src=c.toDataURL('image/jpeg',.88);preview.style.display='block';video.style.display='none';
- stream.getTracks().forEach(t=>t.stop());stream=null;analyze(preview);
+ if(!stream) return fileEl.click();
+ const c=document.createElement('canvas');c.width=videoEl.videoWidth||1000;c.height=videoEl.videoHeight||750;c.getContext('2d').drawImage(videoEl,0,0,c.width,c.height);
+ previewEl.src=c.toDataURL('image/jpeg',.88);previewEl.style.display='block';videoEl.style.display='none';
+ stream.getTracks().forEach(t=>t.stop());stream=null;analyze(previewEl);
 }
-function fromFile(e){const f=e.target.files[0];if(!f)return;preview.src=URL.createObjectURL(f);preview.style.display='block';placeholder.style.display='none';const im=new Image();im.onload=()=>{imageEl=im;analyze(im)};im.src=preview.src}
+function fromFile(e){const f=e.target.files[0];if(!f)return;previewEl.src=URL.createObjectURL(f);previewEl.style.display='block';placeholderEl.style.display='none';const im=new Image();im.onload=()=>{imageEl=im;analyze(im)};im.src=previewEl.src}
 async function ensureModel(){if(!model)model=await cocoSsd.load({base:'lite_mobilenet_v2'});return model}
 
 async function analyze(img){
@@ -168,7 +210,7 @@ function makeCaseId(){return "MDR-"+new Date().toISOString().slice(0,10).replace
 function b64urlEncode(obj){
   const bytes=new TextEncoder().encode(JSON.stringify(obj));
   let binary=""; bytes.forEach(b=>binary+=String.fromCharCode(b));
-  return btoa(binary).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 function b64urlDecode(s){
   const pad=s.length%4 ? "=".repeat(4-s.length%4):"";
@@ -180,7 +222,7 @@ function currentShareUrl(){
   return location.href.split('#')[0] + '#r=' + b64urlEncode(window.currentResult);
 }
 function shareText(){
-  return `MINISTÈRE DU RÉEL — ${window.currentResult.decision}\n\n${window.currentResult.qualification}\nRéférence : ${window.currentResult.caseNo}\n\n${currentShareUrl()}\n\nLA RÉALITÉ AU SERVICE DE TOUS`;
+  return `MINISTÈRE DU RÉEL — ${window.currentResult.decision}\n\n${window.currentResult.qualification}\nRéférence : ${window.currentResult.caseNo}\n\n${currentShareUrl()}\n\nVÉRITÉ · QUALITÉ · CONFORMITÉ`;
 }
 function setShareStatus(msg){document.getElementById('shareStatus').textContent=msg}
 async function shareNative(){
@@ -232,13 +274,29 @@ function submitReality(){
     submittedAt:new Date().toISOString(),
     name,description,qualification,context,
     sourceCase:window.currentResult?.caseNo||null,
-    status:'EN ATTENTE D'EXAMEN'
+    status:"EN ATTENTE D'EXAMEN"
   };
   const proposals=JSON.parse(localStorage.getItem('mdr_rnr_proposals')||'[]');
   proposals.push(proposal);
   localStorage.setItem('mdr_rnr_proposals',JSON.stringify(proposals));
   document.getElementById('submissionStatus').innerHTML=`<div class="success"><b>TRANSMISSION EFFECTUÉE</b><br><br>Votre proposition a été enregistrée sous la référence <span class="submission-ref">${proposal.id}</span>.<br><br><b>STATUT : EN ATTENTE D'EXAMEN</b><br><br>La transmission d'une proposition ne vaut pas intégration au Référentiel national de la réalité.</div>`;
   ['realityName','realityDescription','realityQualification','realityContext'].forEach(id=>document.getElementById(id).value='');
+}
+
+function renderResultSheet(data){
+  const img=document.getElementById('sheetPhoto'), no=document.getElementById('sheetNoPhoto');
+  if(window.currentImageSrc){img.src=window.currentImageSrc;img.style.display='block';no.style.display='none';}
+  else {img.removeAttribute('src');img.style.display='none';no.style.display='flex';}
+  document.getElementById('sheetRef').textContent=(data.caseNo||'MDR—0000').replace(/-/g,'—');
+  document.getElementById('sheetQualification').textContent=data.qualification||'RÉALITÉ NON DÉTERMINÉE';
+  document.getElementById('sheetCertainty').textContent=data.certainty||'NON DÉTERMINABLE';
+  document.getElementById('sheetDecision').textContent=data.decision||'RÉALITÉ EN ATTENTE DE QUALIFICATION';
+  const pct=parseInt(String(data.compliance||'').replace(/[^0-9]/g,''),10);
+  document.getElementById('sheetPercent').textContent=Number.isFinite(pct)?pct+' %':'— %';
+  const track=document.getElementById('certaintyTrack'); track.innerHTML='';
+  const level=Number.isFinite(pct)?Math.round(pct/10):0;
+  for(let i=0;i<10;i++){const cell=document.createElement('span');cell.className='certainty-cell'+(i<level?' on':'');track.appendChild(cell);}
+  document.getElementById('sheetFooterRef').textContent=`RNR—${data.rnrRef||'0037'} · REV. ${data.rnrRev||'2.1'} · ${data.time||new Date().toLocaleTimeString('fr-FR',{hour12:false})}`;
 }
 
 function renderSharedResult(data){
@@ -251,6 +309,7 @@ function renderSharedResult(data){
   document.getElementById('decision').textContent=data.decision;
   document.getElementById('reason').textContent=data.reason;
   document.getElementById('action').textContent=data.action;
+  renderResultSheet(data);
   if(data.rare)document.getElementById('decisionBox').classList.add('rare');
   show('result');
 }
@@ -260,16 +319,43 @@ function tryOpenShared(){
   try{renderSharedResult(b64urlDecode(m[1]));return true}catch(e){return false}
 }
 function renderDecision(preds){
+ window.currentImageSrc = (document.getElementById('preview')?.src && document.getElementById('preview').style.display !== 'none') ? document.getElementById('preview').src : (imageEl?.src || null);
  const best=pickBest(preds);
  let key=best?.class, confidence=best?Math.round(best.score*100):null;
  let info=key&&labels[key]?labels[key]:null;
  let q,cert,observed;
- if(info){q=info.q;cert=confidence>=85?"ÉTABLI":confidence>=55?"PROBABLE":"INCERTAIN";observed=`Élément détecté : ${key} — niveau de détection ${confidence} %.`;}
- else if(best){q="OBJET OU SITUATION NON PRÉVUE AU RÉFÉRENTIEL";cert=confidence>=70?"PROBABLE":"INCERTAIN";observed=`Le système visuel identifie un élément de type « ${best.class} » (${confidence} %).`;}
+ if(info){
+   cert=confidence>=85?"ÉTABLI":confidence>=55?"PROBABLE":"INCERTAIN";
+   if(key==='person'){
+     // COCO-SSD établit uniquement la présence d'une personne. Le scénario administratif
+     // est choisi séparément et ne présume pas d'un selfie.
+     const scenarios=[
+       {q:"PRÉSENCE HUMAINE — INDIVIDU OBSERVÉ",o:"La présence d’un individu humain est détectée dans le champ d’observation. Aucun élément complémentaire n’est requis à ce stade.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — OCCUPANT DU CHAMP OBSERVÉ",o:"Un individu humain occupe une partie du champ de réalité examiné. Sa fonction dans la situation observée n’est pas déterminée.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU EN SITUATION D’OBSERVATION",o:"Un individu humain est visible dans la scène. Les conditions d’observation ne permettent pas d’établir la nature précise de son activité.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU EN INTERACTION AVEC L’ENVIRONNEMENT",o:"La position de l’individu est compatible avec une interaction avec son environnement immédiat. La nature de cette interaction reste indéterminée.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU EN DÉPLACEMENT PRÉSUMÉ",o:"La présence d’un individu humain est établie. Sa posture et sa position sont compatibles avec une situation de déplacement, sans que celui-ci puisse être confirmé.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU STATIQUE OU MOMENTANÉMENT IMMOBILE",o:"Un individu humain est observé. Aucun élément suffisamment fiable ne permet de caractériser son mouvement au moment de la capture.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU ASSOCIÉ À LA SCÈNE OBSERVÉE",o:"La présence humaine est caractérisée. Le lien exact entre l’individu et les autres éléments de la scène n’est pas déterminé.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU DONT LE RÔLE N’EST PAS DÉTERMINÉ",o:"La présence d’une personne est établie. Aucun élément visuel ne permet de retenir une fonction ou un rôle particulier.",d:"generic"},
+       {q:"PRÉSENCE HUMAINE — INDIVIDU SOUMIS À OBSERVATION",o:"La réalité photographiée comprend une présence humaine. L’individu est traité comme élément observé et non comme source d’interprétation.",d:"generic"},
+       {q:"INDIVIDU PROCÉDANT À SA PROPRE DOCUMENTATION",o:"La position de l’individu est compatible avec une prise de vue dirigée vers lui-même. Cette hypothèse demeure non déterminante.",d:"selfie"},
+       {q:"INDIVIDU EN SITUATION D’AUTO-CONSTAT",o:"Les conditions visibles sont compatibles avec une documentation de l’individu par lui-même. Cette compatibilité ne permet pas d’identifier l’auteur de la prise de vue.",d:"selfie"},
+       {q:"INDIVIDU AYANT FOURNI L’ÉLÉMENT DE RÉALITÉ EXAMINÉ",o:"L’individu observé est susceptible d’avoir contribué à la production de l’image. Cette contribution ne peut être établie avec certitude.",d:"selfie"}
+     ];
+     const sc=scenarios[Math.floor(Math.random()*scenarios.length)];
+     q=sc.q; observed=sc.o; window._personScenario=sc; window._personCatalog=info;
+  }
+   else {
+     q=info.q;
+     observed=`Élément détecté : ${key} — niveau de détection ${confidence} %.`;
+   }
+ } else if(best){q="OBJET OU SITUATION NON PRÉVUE AU RÉFÉRENTIEL";cert=confidence>=70?"PROBABLE":"INCERTAIN";observed=`Le système visuel identifie un élément de type « ${best.class} » (${confidence} %).`;}
  else {q="RÉALITÉ NON DÉTERMINÉE";cert="NON DÉTERMINABLE";observed="Aucun élément suffisamment caractéristique n'a été retenu par le système de détection.";}
 
+ const personCatalog=(key==='person' && labels.person && Array.isArray(labels.person.decisions))?labels.person:null;
  const rare=Math.random()<0.30;
- const decisions = rare ? [
+ const decisions = personCatalog ? personCatalog.decisions : (rare ? [
   ["RÉALITÉ CONFIRMÉE PAR ABSENCE D'ÉLÉMENT PERMETTANT DE L'INFIRMER","La situation observée ne présente aucun élément suffisamment contradictoire pour empêcher son maintien dans le registre du réel.","Veuillez consulter l'horoscope du cousin de votre voisine à 13 h 58 dimanche prochain."],
   ["RÉALITÉ ADMINISTRATIVEMENT INOPPORTUNE","L'analyse visuelle est concluante. La réalité correspondante n'apparaît toutefois pas opportune dans le contexte administratif actuel.","Effectuez trois sauts à cloche-pied, puis mangez un ananas."],
   ["ERREUR DE RÉALITÉ — DIVERGENCE INTERSERVICES","L'analyse visuelle et la qualification administrative ne concordent pas. Cette situation est conforme aux procédures en vigueur.","Faites des ronds avec les bras dans le sens inverse des aiguilles d'une montre pendant six minutes."],
@@ -279,7 +365,7 @@ function renderDecision(preds){
   ["RÉALITÉ ADMINISTRATIVEMENT COMPATIBLE","Les éléments visuels sont compatibles avec une réalité susceptible d'être prise en considération par le Ministère.","Veuillez effectuer trois pas en arrière, puis un pas vers l'avant."],
   ["RÉALITÉ NON CONTESTÉE À CE STADE","Aucun élément relevé lors de l'analyse ne justifie, à ce stade, une contestation formelle de la réalité observée.","Vous pouvez poursuivre votre activité normalement."],
   ["RÉALITÉ RECEVABLE SOUS RÉSERVE","La situation observée peut être retenue à titre provisoire dans le cadre de la présente instruction.","Veuillez renouveler la prise de vue après avoir effectué un tour sur vous-même."],
- ];
+ ]);
  const chosen=decisions[Math.floor(Math.random()*decisions.length)];
  document.getElementById('caseNo').textContent=makeCaseId();
  document.getElementById('qualification').textContent=q;
@@ -298,9 +384,13 @@ function renderDecision(preds){
    decision:chosen[0],
    reason:chosen[1],
    action:chosen[2],
-   rare:chosen[0].startsWith("ERREUR")
+   rare:chosen[0].startsWith("ERREUR"),
+   rnrRef: labels[key]?.rnrRef || "0037",
+   rnrRev: "2.1",
+   time: new Date().toLocaleTimeString("fr-FR",{hour12:false})
  };
  window.currentResult=result;
+ renderResultSheet(result);
  if(result.rare)document.getElementById('decisionBox').classList.add('rare');
  show('result');
 }

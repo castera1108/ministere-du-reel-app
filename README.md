@@ -1,16 +1,15 @@
-# Ministère du Réel — prototype RNR
+# Ministère du Réel — V3 IBM Plex + fiche de résultat
 
-Cette version ajoute une première séparation entre le moteur de l'application et le **Référentiel national de la réalité** (`referentiel.json`).
+Version esthétique de l'application avec :
+- IBM Plex Sans pour l'interface et les textes institutionnels ;
+- IBM Plex Mono pour les références et métadonnées techniques ;
+- une fiche graphique de résultat ajoutée immédiatement à la sortie de l'analyse ;
+- photo de la réalité documentée ;
+- qualification, niveau de certitude, indice de conformité, décision et référence RNR ;
+- les informations détaillées existantes restent affichées sous la fiche ;
+- contribution au Référentiel national de la réalité conservée.
 
-## Partage
-Chaque décision reçoit un lien partageable encodé dans l'URL. Les boutons permettent :
-- WhatsApp
-- Message/SMS
-- Instagram (copie le contenu puis ouvre Instagram)
-- partage natif du téléphone
-- copie du lien
+La fiche graphique reprend le principe du spécimen validé : bandeau MDR, référence, unité, photographie, qualification, barre segmentée, décision mise en évidence et pied de fiche technique.
 
-Le partage natif est particulièrement utile sur mobile : si l'appareil propose Instagram dans sa feuille de partage, il peut être sélectionné directement.
-
-## Hébergement
-Le projet doit être servi en HTTPS (GitHub Pages convient) pour l'accès caméra.
+## Catalogue personne / selfie
+Le RNR 0.2 enrichit la catégorie `person` avec des variantes de qualification, observations, décisions et actions administratives, notamment pour les situations d’auto-documentation/selfie. Le catalogue évite toute inférence sur l’identité ou l’apparence physique.
